@@ -13,6 +13,12 @@ import com.shmeli.reminder.fragment.DoneTaskFragment;
 
 public class TabAdapter extends FragmentStatePagerAdapter {
 
+    public static final int CURRENT_TASK_FRAGMENT_POSITION  = 0;
+    public static final int DONE_TASK_FRAGMENT_POSITION     = 1;
+
+    private CurrentTaskFragment currentTaskFragment;
+    private DoneTaskFragment    doneTaskFragment;
+
     private int numberOfTabs;
 
     public TabAdapter(FragmentManager   fragmentManager,
@@ -21,6 +27,9 @@ public class TabAdapter extends FragmentStatePagerAdapter {
         super(fragmentManager);
 
         this.numberOfTabs = numberOfTabs;
+
+        currentTaskFragment = new CurrentTaskFragment();
+        doneTaskFragment    = new DoneTaskFragment();
     }
 
     @Override
@@ -28,10 +37,10 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
         switch(position) {
 
-            case 0:
-                return new CurrentTaskFragment();
-            case 1:
-                return new DoneTaskFragment();
+            case CURRENT_TASK_FRAGMENT_POSITION:
+                return currentTaskFragment;
+            case DONE_TASK_FRAGMENT_POSITION:
+                return doneTaskFragment;
             default:
                 return null;
         }

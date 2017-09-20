@@ -19,6 +19,7 @@ import android.widget.TimePicker;
 
 import com.shmeli.reminder.R;
 import com.shmeli.reminder.Utils;
+import com.shmeli.reminder.model.ModelTask;
 
 import java.util.Calendar;
 
@@ -32,13 +33,17 @@ public class AddingTaskDialogFragment extends DialogFragment {
     private EditText etDate;
     private EditText etTime;
 
+    private Calendar calendar;
+
+    private ModelTask task;
+
     private AddingTaskListener addingTaskListener;
 
     private String errorEmptyTitle = "";
 
     public interface AddingTaskListener {
 
-        void onTaskAdded();
+        void onTaskAdded(ModelTask newTask);
 
         void onTaskAddingCancel();
     }
@@ -92,6 +97,11 @@ public class AddingTaskDialogFragment extends DialogFragment {
         etTime.setOnClickListener(timePickerListener);
 
         builder.setView(container);
+
+        task = new ModelTask();
+
+        calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY + 1);
 
         builder.setPositiveButton(R.string.dialog_ok,       okClickListener);
         builder.setNegativeButton(R.string.dialog_cancel,   cancelClickListener);
@@ -154,8 +164,11 @@ public class AddingTaskDialogFragment extends DialogFragment {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, dayOfMonth);
+                    //Calendar calendar = Calendar.getInstance();
+                    //calendar.set(year, month, dayOfMonth);
+                    calendar.set(Calendar.YEAR,         year);
+                    calendar.set(Calendar.MONTH,        month);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                     etDate.setText(Utils.getDate(calendar.getTimeInMillis()));
                 }
@@ -183,8 +196,11 @@ public class AddingTaskDialogFragment extends DialogFragment {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(0, 0, 0, hourOfDay, minute);
+                    //Calendar calendar = Calendar.getInstance();
+                    //calendar.set(0, 0, 0, hourOfDay, minute);
+                    calendar.set(Calendar.HOUR_OF_DAY,  hourOfDay);
+                    calendar.set(Calendar.MINUTE,       minute);
+                    calendar.set(Calendar.SECOND,       0);
 
                     etTime.setText(Utils.getTime(calendar.getTimeInMillis()));
                 }
@@ -205,7 +221,13 @@ public class AddingTaskDialogFragment extends DialogFragment {
 
             Log.e("LOG", "okClickListener: addingTaskListener is null: " +(addingTaskListener == null));
 
-            addingTaskListener.onTaskAdded();
+            task.setTitle(etTitle.getText().toString());
+
+            if(etDate.length() != 0 || etTime.length() != 0) {
+                task.setDate(calendar.getTimeInMillis());
+            }
+
+            addingTaskListener.onTaskAdded(task);
             dialog.dismiss();
         }
     };

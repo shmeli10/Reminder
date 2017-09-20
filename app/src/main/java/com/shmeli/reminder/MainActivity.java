@@ -18,13 +18,21 @@ import android.widget.Toast;
 
 import com.shmeli.reminder.adapter.TabAdapter;
 import com.shmeli.reminder.dialog.AddingTaskDialogFragment;
+import com.shmeli.reminder.fragment.CurrentTaskFragment;
+import com.shmeli.reminder.fragment.DoneTaskFragment;
 import com.shmeli.reminder.fragment.SplashFragment;
+import com.shmeli.reminder.model.ModelTask;
 
 public class MainActivity   extends     AppCompatActivity
                             implements  AddingTaskDialogFragment.AddingTaskListener {
 
-    FragmentManager     fragmentManager;
-    PreferenceHelper    preferenceHelper;
+    private FragmentManager     fragmentManager;
+    private PreferenceHelper    preferenceHelper;
+
+    private TabAdapter          tabAdapter;
+
+    private CurrentTaskFragment currentTaskFragment;
+    private DoneTaskFragment    doneTaskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +116,7 @@ public class MainActivity   extends     AppCompatActivity
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
-        TabAdapter tabAdapter = new TabAdapter(fragmentManager, 2);
+        tabAdapter = new TabAdapter(fragmentManager, 2);
 
         viewPager.setAdapter(tabAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -130,13 +138,18 @@ public class MainActivity   extends     AppCompatActivity
             }
         });
 
+        currentTaskFragment = (CurrentTaskFragment) tabAdapter.getItem(TabAdapter.CURRENT_TASK_FRAGMENT_POSITION);
+        doneTaskFragment    = (DoneTaskFragment) tabAdapter.getItem(TabAdapter.DONE_TASK_FRAGMENT_POSITION);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabClickListener);
     }
 
     @Override
-    public void onTaskAdded() {
-        Toast.makeText(this, "Task added", Toast.LENGTH_LONG).show();
+    public void onTaskAdded(ModelTask newTask) {
+        //Toast.makeText(this, "Task added", Toast.LENGTH_LONG).show();
+
+        currentTaskFragment.addTask(newTask);
     }
 
     @Override

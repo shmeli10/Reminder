@@ -16,7 +16,7 @@
         android:layout_alignParentLeft="true"
         android:textSize="16sp"
         android:textColor="@color/primary_text_default_material_light"
-        android:text="Title"/>
+        android:text=""/>
     <TextView
         android:id="@+id/tvTaskDate"
         android:layout_width="wrap_content"
@@ -26,7 +26,7 @@
         android:gravity="right"
         android:textSize="14sp"
         android:textColor="@color/secondary_text_default_material_light"
-        android:text="Date"/>
+        android:text=""/>
 
 
 </RelativeLayout>
