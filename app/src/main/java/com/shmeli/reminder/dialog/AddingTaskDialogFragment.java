@@ -12,9 +12,12 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.shmeli.reminder.R;
@@ -32,6 +35,8 @@ public class AddingTaskDialogFragment extends DialogFragment {
     private EditText etTitle;
     private EditText etDate;
     private EditText etTime;
+
+    private Spinner spPriority;
 
     private Calendar calendar;
 
@@ -96,9 +101,32 @@ public class AddingTaskDialogFragment extends DialogFragment {
         etTime                      = tilTime.getEditText();
         etTime.setOnClickListener(timePickerListener);
 
+
+        ArrayAdapter<String> priorityAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                ModelTask.PRIORITY_LEVELS);
+
+        spPriority                  = (Spinner) container.findViewById(R.id.spDialogTaskPriority);
+        spPriority.setAdapter(priorityAdapter);
+        spPriority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         builder.setView(container);
 
+        // ------------------------------------------------------------------------------------ //
+
         task = new ModelTask();
+
+
 
         calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY + 1);
@@ -240,6 +268,19 @@ public class AddingTaskDialogFragment extends DialogFragment {
 
             addingTaskListener.onTaskAddingCancel();
             dialog.cancel();
+        }
+    };
+
+    AdapterView.OnItemSelectedListener spinnerItemSelectListener = new AdapterView.OnItemSelectedListener() {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            task.setPriority(position);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
         }
     };
 }

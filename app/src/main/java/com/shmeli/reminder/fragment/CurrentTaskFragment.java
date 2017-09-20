@@ -11,20 +11,18 @@ import android.view.ViewGroup;
 
 import com.shmeli.reminder.R;
 import com.shmeli.reminder.adapter.CurrentTasksAdapter;
-import com.shmeli.reminder.model.Item;
-import com.shmeli.reminder.model.ModelTask;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CurrentTaskFragment extends Fragment {
+public class CurrentTaskFragment extends TaskFragment {
 
-    private RecyclerView                rvCurrentTasks;
-
-    private RecyclerView.LayoutManager  rvLayoutManager;
-
-    private CurrentTasksAdapter         adapter;
+    // private RecyclerView                rvCurrentTasks;
+//    private RecyclerView                recyclerView;
+//
+//    private RecyclerView.LayoutManager  rvLayoutManager;
+//
+//    private CurrentTasksAdapter         adapter;
 
     public CurrentTaskFragment() {
         // Required empty public constructor
@@ -42,40 +40,44 @@ public class CurrentTaskFragment extends Fragment {
 
         rvLayoutManager = new LinearLayoutManager(getActivity());
 
-        adapter         = new CurrentTasksAdapter();
+        adapter         = new CurrentTasksAdapter(this);
 
-        rvCurrentTasks = (RecyclerView) rootView.findViewById(R.id.rvCurrentTasks);
-        rvCurrentTasks.setLayoutManager(rvLayoutManager);
-        rvCurrentTasks.setAdapter(adapter);
+//        rvCurrentTasks = (RecyclerView) rootView.findViewById(R.id.rvCurrentTasks);
+//        rvCurrentTasks.setLayoutManager(rvLayoutManager);
+//        rvCurrentTasks.setAdapter(adapter);
+
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.rvCurrentTasks);
+        recyclerView.setLayoutManager(rvLayoutManager);
+        recyclerView.setAdapter(adapter);
 
         return rootView;
     }
 
-    public void addTask(ModelTask newTask) {
-
-        int position = -1;
-
-        for(int i=0; i<adapter.getItemCount(); i++) {
-
-            Item item = adapter.getItem(i);
-
-            if(item.isTask()) {
-
-                ModelTask task = (ModelTask) item;
-
-                if(newTask.getDate() < task.getDate()) {
-
-                    position = i;
-                    break;
-                }
-            }
-        }
-
-        if(position != -1) {
-            adapter.addItem(position, newTask);
-        }
-        else {
-            adapter.addItem(newTask);
-        }
-    }
+//    public void addTask(ModelTask newTask) {
+//
+//        int position = -1;
+//
+//        for(int i=0; i<adapter.getItemCount(); i++) {
+//
+//            Item item = adapter.getItem(i);
+//
+//            if(item.isTask()) {
+//
+//                ModelTask task = (ModelTask) item;
+//
+//                if(newTask.getDate() < task.getDate()) {
+//
+//                    position = i;
+//                    break;
+//                }
+//            }
+//        }
+//
+//        if(position != -1) {
+//            adapter.addItem(position, newTask);
+//        }
+//        else {
+//            adapter.addItem(newTask);
+//        }
+//    }
 }

@@ -15,11 +15,11 @@ import com.shmeli.reminder.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DoneTaskFragment extends Fragment {
+public class DoneTaskFragment extends TaskFragment {
 
-    private RecyclerView                rvDoneTasks;
-
-    private RecyclerView.LayoutManager  rvLayoutManager;
+//    private RecyclerView                rvDoneTasks;
+//
+//    private RecyclerView.LayoutManager  rvLayoutManager;
 
     public DoneTaskFragment() {
         // Required empty public constructor
@@ -34,8 +34,8 @@ public class DoneTaskFragment extends Fragment {
 
         rvLayoutManager = new LinearLayoutManager(getActivity());
 
-        rvDoneTasks = (RecyclerView) rootView.findViewById(R.id.rvDoneTasks);
-        rvDoneTasks.setLayoutManager(rvLayoutManager);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.rvDoneTasks);
+        recyclerView.setLayoutManager(rvLayoutManager);
 
         return rootView;
     }
