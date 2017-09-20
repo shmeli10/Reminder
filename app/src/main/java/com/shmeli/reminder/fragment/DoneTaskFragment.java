@@ -1,6 +1,7 @@
 package com.shmeli.reminder.fragment;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shmeli.reminder.R;
+import com.shmeli.reminder.database.DBHelper;
+import com.shmeli.reminder.model.ModelTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -21,10 +27,26 @@ public class DoneTaskFragment extends TaskFragment {
 //
 //    private RecyclerView.LayoutManager  rvLayoutManager;
 
+    OnTaskRestoreListener onTaskRestoreListener;
+
+    public interface OnTaskRestoreListener {
+        void onTaskRestore(ModelTask newTask);
+    }
+
     public DoneTaskFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            onTaskRestoreListener = (OnTaskRestoreListener) activity;
+        } catch(ClassCastException exc) {
+            throw new ClassCastException(activity.toString() + " must implement OnTaskRestoreListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,4 +62,21 @@ public class DoneTaskFragment extends TaskFragment {
         return rootView;
     }
 
+    @Override
+    public void addTaskFromDB() {
+        List<ModelTask> taskList = new ArrayList<>();
+
+        taskList.addAll(activity.dbHelper.query().getTaskList(  DBHelper.SELECTION_STATUS,
+                                                                new String[] {Integer.toString(ModelTask.STATUS_DONE)},
+                                                                DBHelper.TASK_DATE_COLUMN));
+
+        for(int i=0; i<taskList.size(); i++) {
+            addTask(taskList.get(i), false);
+        }
+    }
+
+    @Override
+    public void moveTask(ModelTask task) {
+        onTaskRestoreListener.onTaskRestore(task);
+    }
 }

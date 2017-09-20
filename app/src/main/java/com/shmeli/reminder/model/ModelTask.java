@@ -2,6 +2,8 @@ package com.shmeli.reminder.model;
 
 import com.shmeli.reminder.R;
 
+import java.util.Date;
+
 /**
  * Created by Serghei Ostrovschi on 9/20/17.
  */
@@ -21,22 +23,26 @@ public class ModelTask implements Item {
     private String title;
 
     private long date;
+    private long timeStamp;
 
     private int priority;
 
     private int status;
 
     public ModelTask() {
-        this.status = -1;
+        this.status     = -1;
+        this.timeStamp  = new Date().getTime();
     }
 
     public ModelTask(String title,
                      long   date,
+                     long   timeStamp,
                      int    priority,
                      int    status) {
 
         this.title      = title;
         this.date       = date;
+        this.timeStamp  = timeStamp;
         this.priority   = priority;
         this.status     = status;
     }
@@ -95,6 +101,10 @@ public class ModelTask implements Item {
         }
     }
 
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
     // ---------------------- SETTERS -------------------------------- //
 
     public void setDate(long date) {
@@ -111,5 +121,9 @@ public class ModelTask implements Item {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }

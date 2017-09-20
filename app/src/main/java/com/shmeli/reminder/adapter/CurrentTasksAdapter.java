@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.shmeli.reminder.R;
 import com.shmeli.reminder.Utils;
 import com.shmeli.reminder.fragment.CurrentTaskFragment;
-import com.shmeli.reminder.fragment.TaskFragment;
 import com.shmeli.reminder.model.Item;
 import com.shmeli.reminder.model.ModelTask;
 
@@ -140,6 +139,9 @@ public class CurrentTasksAdapter extends TaskAdapter {
 
             if(task != null) {
                 task.setStatus(ModelTask.STATUS_DONE);
+
+                getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(),
+                                                                    ModelTask.STATUS_DONE);
 
                 itemView.setBackgroundColor(resources.getColor(R.color.gray_200));
 

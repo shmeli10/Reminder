@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.shmeli.reminder.adapter.TabAdapter;
+import com.shmeli.reminder.database.DBHelper;
 import com.shmeli.reminder.dialog.AddingTaskDialogFragment;
 import com.shmeli.reminder.fragment.CurrentTaskFragment;
 import com.shmeli.reminder.fragment.DoneTaskFragment;
@@ -24,7 +25,9 @@ import com.shmeli.reminder.fragment.SplashFragment;
 import com.shmeli.reminder.model.ModelTask;
 
 public class MainActivity   extends     AppCompatActivity
-                            implements  AddingTaskDialogFragment.AddingTaskListener {
+                            implements  AddingTaskDialogFragment.AddingTaskListener,
+                                        CurrentTaskFragment.OnTaskDoneListener,
+                                        DoneTaskFragment.OnTaskRestoreListener {
 
     private FragmentManager     fragmentManager;
     private PreferenceHelper    preferenceHelper;
@@ -34,18 +37,19 @@ public class MainActivity   extends     AppCompatActivity
     private CurrentTaskFragment currentTaskFragment;
     private DoneTaskFragment    doneTaskFragment;
 
+    public DBHelper             dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
         PreferenceHelper.getInstance().init(getApplicationContext());
         preferenceHelper = PreferenceHelper.getInstance();
 
         fragmentManager = getSupportFragmentManager(); //FragmentManager();
+
+        dbHelper        = new DBHelper(getApplicationContext());
 
         runSplash();
 
@@ -145,17 +149,6 @@ public class MainActivity   extends     AppCompatActivity
         fab.setOnClickListener(fabClickListener);
     }
 
-    @Override
-    public void onTaskAdded(ModelTask newTask) {
-        //Toast.makeText(this, "Task added", Toast.LENGTH_LONG).show();
-
-        currentTaskFragment.addTask(newTask);
-    }
-
-    @Override
-    public void onTaskAddingCancel() {
-        Toast.makeText(this, "Task adding cancel", Toast.LENGTH_LONG).show();
-    }
 
     View.OnClickListener fabClickListener = new View.OnClickListener() {
         @Override
@@ -165,4 +158,26 @@ public class MainActivity   extends     AppCompatActivity
             addingTaskDialogFragment.show(getFragmentManager(), "AddingTaskDialogFragment");
         }
     };
+
+    @Override
+    public void onTaskAdded(ModelTask newTask) {
+        //Toast.makeText(this, "Task added", Toast.LENGTH_LONG).show();
+
+        currentTaskFragment.addTask(newTask, true);
+    }
+
+    @Override
+    public void onTaskAddingCancel() {
+        Toast.makeText(this, "Task adding cancel", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onTaskDone(ModelTask task) {
+        doneTaskFragment.addTask(task, false);
+    }
+
+    @Override
+    public void onTaskRestore(ModelTask task) {
+        currentTaskFragment.addTask(task, false);
+    }
 }
