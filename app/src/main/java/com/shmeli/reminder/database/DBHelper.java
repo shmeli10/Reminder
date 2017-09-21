@@ -20,11 +20,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TASKS_TABLE      = "tasks_table";
 
-    public static final String TASK_TITLE_COLUMN    = "task_title";
-    public static final String TASK_DATE_COLUMN     = "task_date";
-    public static final String TASK_PRIORITY_COLUMN = "task_priority";
-    public static final String TASK_STATUS_COLUMN   = "task_status";
-    public static final String TASK_TIME_COLUMN     = "task_time_stamp";
+    public static final String TASK_TITLE_COLUMN        = "task_title";
+    public static final String TASK_DATE_COLUMN         = "task_date";
+    public static final String TASK_PRIORITY_COLUMN     = "task_priority";
+    public static final String TASK_STATUS_COLUMN       = "task_status";
+    public static final String TASK_TIME_STAMP_COLUMN   = "task_time_stamp";
 
     public static final String TASKS_TABLE_CREATE_SCRIPT  = "CREATE TABLE " + TASKS_TABLE +
                                                             " (" + BaseColumns._ID      + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -32,10 +32,12 @@ public class DBHelper extends SQLiteOpenHelper {
                                                             "" + TASK_DATE_COLUMN       + " LONG, " +
                                                             "" + TASK_PRIORITY_COLUMN   + " INTEGER, " +
                                                             "" + TASK_STATUS_COLUMN     + " INTEGER, " +
-                                                            "" + TASK_TIME_COLUMN       + " LONG" +
+                                                            "" + TASK_TIME_STAMP_COLUMN + " LONG" +
                                                             ");";
 
-    public static final String SELECTION_STATUS = DBHelper.TASK_STATUS_COLUMN + " = ?";
+    public static final String SELECTION_STATUS     = TASK_STATUS_COLUMN + " = ?";
+    public static final String SELECTION_TIME_STAMP = TASK_TIME_STAMP_COLUMN + " = ?";
+    public static final String SELECTION_LIKE_TITLE = TASK_TITLE_COLUMN + " LIKE ?";
 
     private DBQueryManager  queryManager;
     private DBUpdateManager updateManager;
@@ -67,7 +69,7 @@ public class DBHelper extends SQLiteOpenHelper {
         newValues.put(TASK_DATE_COLUMN,     task.getDate());
         newValues.put(TASK_PRIORITY_COLUMN, task.getPriority());
         newValues.put(TASK_STATUS_COLUMN,   task.getStatus());
-        newValues.put(TASK_TIME_COLUMN,     task.getTimeStamp());
+        newValues.put(TASK_TIME_STAMP_COLUMN,     task.getTimeStamp());
 
         getWritableDatabase().insert(   TASKS_TABLE,
                                         null,
@@ -80,5 +82,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public DBUpdateManager update() {
         return updateManager;
+    }
+
+    public void removeTask(long timeStamp) {
+
+        getWritableDatabase().delete(   TASKS_TABLE,
+                                        SELECTION_TIME_STAMP,
+                                        new String[] {Long.toString(timeStamp)});
     }
 }

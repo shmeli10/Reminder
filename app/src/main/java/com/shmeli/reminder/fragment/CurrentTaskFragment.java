@@ -2,11 +2,13 @@ package com.shmeli.reminder.fragment;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
+
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,12 +82,33 @@ public class CurrentTaskFragment extends TaskFragment {
     }
 
     @Override
+    public void findTasks(String title) {
+        adapter.removeAllItems();
+
+        List<ModelTask> taskList = new ArrayList<>();
+
+        taskList.addAll(activity.dbHelper.query().getTaskList(  DBHelper.SELECTION_LIKE_TITLE + " AND " + DBHelper.SELECTION_STATUS + " OR " + DBHelper.SELECTION_STATUS,
+                                                                new String[] {"%" +title+ "%", Integer.toString(ModelTask.STATUS_CURRENT), Integer.toString(ModelTask.STATUS_OVERDUE)},
+                                                                DBHelper.TASK_DATE_COLUMN));
+        for(int i=0; i<taskList.size(); i++) {
+            addTask(taskList.get(i), false);
+        }
+    }
+
+    @Override
     public void addTaskFromDB() {
+        Log.e("LOG", "CurrentTaskFragment: addTaskFromDB()");
+
+        adapter.removeAllItems();
+
         List<ModelTask> taskList = new ArrayList<>();
 
         taskList.addAll(activity.dbHelper.query().getTaskList(  DBHelper.SELECTION_STATUS + " OR " + DBHelper.SELECTION_STATUS,
                                                                 new String[] {Integer.toString(ModelTask.STATUS_CURRENT), Integer.toString(ModelTask.STATUS_OVERDUE)},
                                                                 DBHelper.TASK_DATE_COLUMN));
+
+        Log.e("LOG", "CurrentTaskFragment: addTaskFromDB(): taskList.size= " +taskList.size());
+
         for(int i=0; i<taskList.size(); i++) {
             addTask(taskList.get(i), false);
         }

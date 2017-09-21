@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shmeli.reminder.R;
+import com.shmeli.reminder.adapter.DoneTasksAdapter;
 import com.shmeli.reminder.database.DBHelper;
 import com.shmeli.reminder.model.ModelTask;
 
@@ -51,19 +52,41 @@ public class DoneTaskFragment extends TaskFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_done_task, container, false);
+
+        View rootView = inflater.inflate(   R.layout.fragment_done_task,
+                                            container,
+                                            false);
 
         rvLayoutManager = new LinearLayoutManager(getActivity());
 
+        adapter = new DoneTasksAdapter(this);
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rvDoneTasks);
         recyclerView.setLayoutManager(rvLayoutManager);
+        recyclerView.setAdapter(adapter);
 
         return rootView;
     }
 
     @Override
+    public void findTasks(String title) {
+        adapter.removeAllItems();
+
+        List<ModelTask> taskList = new ArrayList<>();
+
+        taskList.addAll(activity.dbHelper.query().getTaskList( DBHelper.SELECTION_LIKE_TITLE + " AND " + DBHelper.SELECTION_STATUS,
+                                                                new String[] {"%" +title+ "%", Integer.toString(ModelTask.STATUS_DONE)},
+                                                                DBHelper.TASK_DATE_COLUMN));
+
+        for(int i=0; i<taskList.size(); i++) {
+            addTask(taskList.get(i), false);
+        }
+    }
+
+    @Override
     public void addTaskFromDB() {
+        adapter.removeAllItems();
+
         List<ModelTask> taskList = new ArrayList<>();
 
         taskList.addAll(activity.dbHelper.query().getTaskList(  DBHelper.SELECTION_STATUS,

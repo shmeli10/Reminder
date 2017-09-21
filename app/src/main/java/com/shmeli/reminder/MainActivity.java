@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import android.view.Menu;
@@ -22,6 +23,7 @@ import com.shmeli.reminder.dialog.AddingTaskDialogFragment;
 import com.shmeli.reminder.fragment.CurrentTaskFragment;
 import com.shmeli.reminder.fragment.DoneTaskFragment;
 import com.shmeli.reminder.fragment.SplashFragment;
+import com.shmeli.reminder.fragment.TaskFragment;
 import com.shmeli.reminder.model.ModelTask;
 
 public class MainActivity   extends     AppCompatActivity
@@ -34,8 +36,10 @@ public class MainActivity   extends     AppCompatActivity
 
     private TabAdapter          tabAdapter;
 
-    private CurrentTaskFragment currentTaskFragment;
-    private DoneTaskFragment    doneTaskFragment;
+    TaskFragment                currentTaskFragment;
+    TaskFragment                doneTaskFragment;
+
+    SearchView                  searchView;
 
     public DBHelper             dbHelper;
 
@@ -47,22 +51,13 @@ public class MainActivity   extends     AppCompatActivity
         PreferenceHelper.getInstance().init(getApplicationContext());
         preferenceHelper = PreferenceHelper.getInstance();
 
-        fragmentManager = getSupportFragmentManager(); //FragmentManager();
-
         dbHelper        = new DBHelper(getApplicationContext());
+
+        fragmentManager = getSupportFragmentManager(); //FragmentManager();
 
         runSplash();
 
         setUI();
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
     @Override
@@ -145,6 +140,21 @@ public class MainActivity   extends     AppCompatActivity
         currentTaskFragment = (CurrentTaskFragment) tabAdapter.getItem(TabAdapter.CURRENT_TASK_FRAGMENT_POSITION);
         doneTaskFragment    = (DoneTaskFragment) tabAdapter.getItem(TabAdapter.DONE_TASK_FRAGMENT_POSITION);
 
+        searchView          = (SearchView) findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                currentTaskFragment.findTasks(newText);
+                doneTaskFragment.findTasks(newText);
+                return false;
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabClickListener);
     }
@@ -161,7 +171,7 @@ public class MainActivity   extends     AppCompatActivity
 
     @Override
     public void onTaskAdded(ModelTask newTask) {
-        //Toast.makeText(this, "Task added", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Task added", Toast.LENGTH_LONG).show();
 
         currentTaskFragment.addTask(newTask, true);
     }

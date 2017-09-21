@@ -26,7 +26,7 @@ public class DBUpdateManager {
 
         database.update(DBHelper.TASKS_TABLE,
                         contentValues,
-                        DBHelper.TASK_TIME_COLUMN + " = " + key,
+                        DBHelper.TASK_TIME_STAMP_COLUMN + " = " + key,
                         null);
     }
 
@@ -79,7 +79,7 @@ public class DBUpdateManager {
 
         database.update(DBHelper.TASKS_TABLE,
                 contentValues,
-                DBHelper.TASK_TIME_COLUMN + " = " + key,
+                DBHelper.TASK_TIME_STAMP_COLUMN + " = " + key,
                 null);
     }
 }

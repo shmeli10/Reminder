@@ -1,9 +1,11 @@
 package com.shmeli.reminder.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.shmeli.reminder.database.DBHelper;
 import com.shmeli.reminder.fragment.TaskFragment;
 import com.shmeli.reminder.model.Item;
 
@@ -36,6 +38,9 @@ public abstract class TaskAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
+
+        Log.e("LOG", "TaskAdapter: getItemCount(): itemList.size = " +itemList.size());
+
         return itemList.size();
     }
 
@@ -65,6 +70,13 @@ public abstract class TaskAdapter extends RecyclerView.Adapter<RecyclerView.View
             itemList.remove(location);
 
             notifyItemRemoved(location);
+        }
+    }
+
+    public void removeAllItems() {
+        if(getItemCount() != 0) {
+            itemList = new ArrayList<>();
+            notifyDataSetChanged();
         }
     }
 
