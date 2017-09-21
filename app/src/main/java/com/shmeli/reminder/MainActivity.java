@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.shmeli.reminder.adapter.TabAdapter;
+import com.shmeli.reminder.alarm.AlarmHelper;
 import com.shmeli.reminder.database.DBHelper;
 import com.shmeli.reminder.dialog.AddingTaskDialogFragment;
 import com.shmeli.reminder.fragment.CurrentTaskFragment;
@@ -51,6 +52,8 @@ public class MainActivity   extends     AppCompatActivity
         PreferenceHelper.getInstance().init(getApplicationContext());
         preferenceHelper = PreferenceHelper.getInstance();
 
+        AlarmHelper.getInstance().init(getApplicationContext());
+
         dbHelper        = new DBHelper(getApplicationContext());
 
         fragmentManager = getSupportFragmentManager(); //FragmentManager();
@@ -58,6 +61,20 @@ public class MainActivity   extends     AppCompatActivity
         runSplash();
 
         setUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        MyApplication.activityPaused();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        MyApplication.activityPaused();
     }
 
     @Override
