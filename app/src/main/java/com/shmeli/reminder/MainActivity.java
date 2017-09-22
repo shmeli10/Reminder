@@ -21,6 +21,7 @@ import com.shmeli.reminder.adapter.TabAdapter;
 import com.shmeli.reminder.alarm.AlarmHelper;
 import com.shmeli.reminder.database.DBHelper;
 import com.shmeli.reminder.dialog.AddingTaskDialogFragment;
+import com.shmeli.reminder.dialog.EditTaskDialogFragment;
 import com.shmeli.reminder.fragment.CurrentTaskFragment;
 import com.shmeli.reminder.fragment.DoneTaskFragment;
 import com.shmeli.reminder.fragment.SplashFragment;
@@ -29,6 +30,7 @@ import com.shmeli.reminder.model.ModelTask;
 
 public class MainActivity   extends     AppCompatActivity
                             implements  AddingTaskDialogFragment.AddingTaskListener,
+                                        EditTaskDialogFragment.EditingTaskListener,
                                         CurrentTaskFragment.OnTaskDoneListener,
                                         DoneTaskFragment.OnTaskRestoreListener {
 
@@ -206,5 +208,11 @@ public class MainActivity   extends     AppCompatActivity
     @Override
     public void onTaskRestore(ModelTask task) {
         currentTaskFragment.addTask(task, false);
+    }
+
+    @Override
+    public void onTaskEdited(ModelTask updatedTask) {
+        currentTaskFragment.updateTask(updatedTask);
+        dbHelper.update().task(updatedTask);
     }
 }

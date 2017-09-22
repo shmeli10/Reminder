@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.shmeli.reminder.R;
 import com.shmeli.reminder.adapter.DoneTasksAdapter;
 import com.shmeli.reminder.database.DBHelper;
+import com.shmeli.reminder.model.Item;
 import com.shmeli.reminder.model.ModelTask;
 
 import java.util.ArrayList;
@@ -99,7 +100,46 @@ public class DoneTaskFragment extends TaskFragment {
     }
 
     @Override
+    public void addTask(ModelTask   newTask,
+                        boolean     saveToDB) {
+
+        int position = -1;
+
+        for(int i=0; i<adapter.getItemCount(); i++) {
+
+            Item item = adapter.getItem(i);
+
+            if(item.isTask()) {
+
+                ModelTask task = (ModelTask) item;
+
+                if(newTask.getDate() < task.getDate()) {
+
+                    position = i;
+                    break;
+                }
+            }
+        }
+
+        if(position != -1) {
+            adapter.addItem(position, newTask);
+        }
+        else {
+            adapter.addItem(newTask);
+        }
+
+        if(saveToDB) {
+            activity.dbHelper.saveTask(newTask);
+        }
+    }
+
+    @Override
     public void moveTask(ModelTask task) {
+
+        if(task.getDate() != 0) {
+            alarmHelper.setAlarm(task);
+        }
+
         onTaskRestoreListener.onTaskRestore(task);
     }
 }
