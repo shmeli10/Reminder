@@ -140,7 +140,7 @@ public class DoneTasksAdapter extends TaskAdapter {
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            if (task.getStatus() != ModelTask.STATUS_DONE) {
+                            if (task.getStatus() != ModelTask.STATUS_CURRENT) {
 
                                 ObjectAnimator translationX = ObjectAnimator.ofFloat(   itemView,
                                                                                         "translationX",
@@ -160,7 +160,6 @@ public class DoneTasksAdapter extends TaskAdapter {
 
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
-
                                         itemView.setVisibility(View.GONE);
 
                                         getTaskFragment().moveTask(task);
@@ -194,6 +193,8 @@ public class DoneTasksAdapter extends TaskAdapter {
 
                         }
                     });
+
+                    flipIn.start();
                 }
             });
         }

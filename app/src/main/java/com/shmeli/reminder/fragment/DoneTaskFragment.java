@@ -133,6 +133,8 @@ public class DoneTaskFragment extends TaskFragment {
         }
     }
 
+
+
     @Override
     public void moveTask(ModelTask task) {
 
@@ -141,5 +143,14 @@ public class DoneTaskFragment extends TaskFragment {
         }
 
         onTaskRestoreListener.onTaskRestore(task);
+    }
+
+    @Override
+    public void checkAdapter() {
+        if(adapter == null) {
+            adapter = new DoneTasksAdapter(this);
+
+            addTaskFromDB();
+        }
     }
 }

@@ -140,7 +140,7 @@ public class CurrentTasksAdapter extends TaskAdapter {
             taskViewHolder.priority.setColorFilter(resources.getColor(task.getPriorityColor()));
             taskViewHolder.priority.setImageResource(R.drawable.ic_circle_white_48dp);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(   new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     getTaskFragment().showTaskEditDialog(task);

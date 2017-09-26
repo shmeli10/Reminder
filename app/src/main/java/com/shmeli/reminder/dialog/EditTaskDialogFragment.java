@@ -4,14 +4,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
+
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -61,11 +64,11 @@ public class EditTaskDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        Bundle args = getArguments();
+        Bundle args     = getArguments();
         String title    = args.getString("title");
 
-        long date       = args.getLong("date", 0);
-        long timeStamp  = args.getLong("time_stamp", 0);
+        long date       = args.getLong("date",          0);
+        long timeStamp  = args.getLong("time_stamp",    0);
 
         int priority    = args.getInt("priority", 0 );
 
@@ -294,22 +297,22 @@ public class EditTaskDialogFragment extends DialogFragment {
         }
     };
 
-    DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-
-            // Log.e("LOG", "okClickListener: addingTaskListener is null: " +(addingTaskListener == null));
-
-
-        }
-    };
-
-    DialogInterface.OnClickListener cancelClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-
-            //Log.e("LOG", "cancelClickListener: addingTaskListener is null: " +(addingTaskListener == null));
-        }
-    };
+//    DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
+//        @Override
+//        public void onClick(DialogInterface dialog, int which) {
+//
+//            // Log.e("LOG", "okClickListener: addingTaskListener is null: " +(addingTaskListener == null));
+//
+//
+//        }
+//    };
+//
+//    DialogInterface.OnClickListener cancelClickListener = new DialogInterface.OnClickListener() {
+//        @Override
+//        public void onClick(DialogInterface dialog, int which) {
+//
+//            //Log.e("LOG", "cancelClickListener: addingTaskListener is null: " +(addingTaskListener == null));
+//        }
+//    };
 
 }

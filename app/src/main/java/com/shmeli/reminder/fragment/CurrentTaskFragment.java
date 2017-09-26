@@ -147,7 +147,7 @@ public class CurrentTaskFragment extends TaskFragment {
                     separator = new ModelSeparator(ModelSeparator.TYPE_TODAY);
                 }
             }
-            else if(calendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 1) {
+            else if(calendar.get(Calendar.DAY_OF_YEAR) == (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 1)) {
                 newTask.setDateStatus(ModelSeparator.TYPE_TOMORROW);
 
                 if(!adapter.containsSeparatorTomorrow) {
@@ -156,7 +156,7 @@ public class CurrentTaskFragment extends TaskFragment {
                     separator = new ModelSeparator(ModelSeparator.TYPE_TOMORROW);
                 }
             }
-            else if(calendar.get(Calendar.DAY_OF_YEAR) > Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 1) {
+            else if(calendar.get(Calendar.DAY_OF_YEAR) > (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 1)) {
                 newTask.setDateStatus(ModelSeparator.TYPE_FUTURE);
 
                 if(!adapter.containsSeparatorFuture) {
@@ -170,17 +170,35 @@ public class CurrentTaskFragment extends TaskFragment {
         if(position != -1) {
 
             if(!adapter.getItem(position - 1).isTask()) {
-                Item item = adapter.getItem(position - 2);
 
-                if(position - 2 >= 0 && item.isTask()) {
-                    ModelTask task = (ModelTask) item;
+                if(position - 2 >= 0) {
 
-                    if(task.getDateStatus() == newTask.getDateStatus()) {
+                    Item item = adapter.getItem(position - 2);
+
+                    if(item.isTask()) {
+                        ModelTask task = (ModelTask) item;
+
+                        if(task.getDateStatus() == newTask.getDateStatus()) {
+                            position -= 1;
+                        }
+                    }
+
+//                    if(position - 2 >= 0 && item.isTask()) {
+//                        ModelTask task = (ModelTask) item;
+//
+//                        if(task.getDateStatus() == newTask.getDateStatus()) {
+//                            position -= 1;
+//                        }
+//                    }
+//                    else if(position - 2 < 0 && newTask.getDate() == 0) {
+//                        position -= 1;
+//                    }
+
+                }
+                else {
+                    if(newTask.getDate() == 0) {
                         position -= 1;
                     }
-                }
-                else if(position - 2 < 0 && newTask.getDate() == 0) {
-                    position -= 1;
                 }
             }
 
@@ -229,6 +247,15 @@ public class CurrentTaskFragment extends TaskFragment {
         alarmHelper.removeAlarm(task.getTimeStamp());
 
         onTaskDoneListener.onTaskDone(task);
+    }
+
+    @Override
+    public void checkAdapter() {
+        if(adapter == null) {
+            adapter = new CurrentTasksAdapter(this);
+
+            addTaskFromDB();
+        }
     }
 
 //    public void addTask(ModelTask newTask) {

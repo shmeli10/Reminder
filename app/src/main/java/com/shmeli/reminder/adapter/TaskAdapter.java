@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.shmeli.reminder.database.DBHelper;
 import com.shmeli.reminder.fragment.TaskFragment;
 import com.shmeli.reminder.model.Item;
 import com.shmeli.reminder.model.ModelSeparator;
@@ -45,9 +44,7 @@ public abstract class TaskAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-
-        Log.e("LOG", "TaskAdapter: getItemCount(): itemList.size = " +itemList.size());
-
+        //Log.e("LOG", "TaskAdapter: getItemCount(): itemList.size = " +itemList.size());
         return itemList.size();
     }
 

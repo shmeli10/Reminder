@@ -1,6 +1,7 @@
 package com.shmeli.reminder;
 
 import android.app.DialogFragment;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 
@@ -51,6 +52,8 @@ public class MainActivity   extends     AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Ads.showBanner(this);
+
         PreferenceHelper.getInstance().init(getApplicationContext());
         preferenceHelper = PreferenceHelper.getInstance();
 
@@ -64,6 +67,9 @@ public class MainActivity   extends     AppCompatActivity
 
         setUI();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) { }
 
     @Override
     protected void onResume() {
